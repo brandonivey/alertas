@@ -20,27 +20,15 @@
 
 import os
 
-# We want to seamlessy run our API both locally and on Heroku so:
-if os.environ.get('PORT'):
-    # We're hosted on Heroku!  Use the MongoHQ sandbox as our backend.
-    MONGO_HOST = 'alex.mongohq.com'
-    MONGO_PORT = 10047
-    MONGO_USERNAME = 'evedemo'
-    MONGO_PASSWORD = 'evedemo'
-    MONGO_DBNAME = 'app9346575'
+# Use the MongoHQ sandbox as our backend.
+MONGO_HOST = 'ds031721.mongolab.com'
+MONGO_PORT = 31721
+MONGO_USERNAME = 'score_dbuser'
+MONGO_PASSWORD = '3003SummitBlvd'
+MONGO_DBNAME = 'scorecard'
 
-    # also, correctly set the API entry point
-    SERVER_NAME = 'eve-demo.herokuapp.com'
-else:
-    # Running on local machine. Let's just use the local mongod instance.
-    MONGO_HOST = 'localhost'
-    MONGO_PORT = 27017
-    MONGO_USERNAME = 'user'
-    MONGO_PASSWORD = 'user'
-    MONGO_DBNAME = 'apitest'
-
-    # let's not forget the API entry point (not really needed anyway)
-    #SERVER_NAME = '127.0.0.1:5000'
+# also, correctly set the API entry point
+# SERVER_NAME = 'localhost'
 
 
 # Enable reads (GET), inserts (POST) and DELETE for resources/collections
@@ -57,87 +45,46 @@ ITEM_METHODS = ['GET', 'PATCH', 'DELETE']
 CACHE_CONTROL = 'max-age=20'
 CACHE_EXPIRES = 20
 
-# Our API will expose two resources (MongoDB collections): 'people' and
-# 'works'. In order to allow for proper data validation, we define beaviour
-# and structure.
-people = {
-    # 'title' tag used in item links.
-    'item_title': 'person',
-
-    # by default the standard item entry point is defined as
-    # '/people/<ObjectId>/'. We leave it untouched, and we also enable an
-    # additional read-only entry point. This way consumers can also perform GET
-    # requests at '/people/<lastname>/'.
-    'additional_lookup': {
-        'url': 'regex("[\w]+")',
-        'field': 'lastname'
-    },
-
-    # Schema definition, based on Cerberus grammar. Check the Cerberus project
-    # (https://github.com/nicolaiarocci/cerberus) for details.
-    'schema': {
-        'firstname': {
-            'type': 'string',
-            'minlength': 1,
-            'maxlength': 10,
-        },
-        'lastname': {
-            'type': 'string',
-            'minlength': 1,
-            'maxlength': 15,
-            'required': True,
-            # talk about hard constraints! For the purpose of the demo
-            # 'lastname' is an API entry-point, so we need it to be unique.
-            'unique': True,
-        },
-        # 'role' is a list, and can only contain values from 'allowed'.
-        'role': {
-            'type': 'list',
-            'allowed': ["author", "contributor", "copy"],
-        },
-        # An embedded 'strongly-typed' dictionary.
-        'location': {
-            'type': 'dict',
-            'schema': {
-                'address': {'type': 'string'},
-                'city': {'type': 'string'}
-            },
-        },
-        'born': {
-            'type': 'datetime',
-        },
-    }
-}
-
-works = {
+daily = {
     # if 'item_title' is not provided Eve will just strip the final
     # 's' from resource name, and use it as the item_title.
-    #'item_title': 'work',
+    # 'item_title': 'daily_score',
 
     # We choose to override global cache-control directives for this resource.
     'cache_control': 'max-age=10,must-revalidate',
     'cache_expires': 10,
 
+    'additional_lookup': {
+        'url': 'regex("[\w]+")',
+        'field': 'unit'
+    },
+
     'schema': {
-        'title': {
+        'page': {
             'type': 'string',
             'required': True,
         },
-        'description': {
+        'unit': {
             'type': 'string',
         },
-        'owner': {
-            'type': 'objectid',
+        'count': {
+            'type': 'integer',
+        },
+        'availability': {
+            'type': 'integer',
+        },
+        'unit': {
+            'type': 'string',
             'required': True,
-            # referential integrity constraint: value must exist in the
-            # 'people' collection. Since we aren't declaring a 'field' key,
-            # will default to `people._id` (or, more precisely, to whatever
-            # ID_FIELD value is).
-            'data_relation': {
-                'resource': 'people',
-                # make the owner embeddable with ?embedded={"owner":1}
-                'embeddable': True
-            },
+        },
+        'page_id': {
+            'type': 'integer',
+        },
+        'date': {
+            'type': 'datetime',
+        },
+        'performance': {
+            'type': 'float',
         },
     }
 }
@@ -145,6 +92,5 @@ works = {
 # The DOMAIN dict explains which resources will be available and how they will
 # be accessible to the API consumer.
 DOMAIN = {
-    'people': people,
-    'works': works,
+    'daily': daily,
 }

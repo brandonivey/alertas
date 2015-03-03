@@ -10,7 +10,7 @@ MONGO_HOST = 'localhost'
 MONGO_PORT = 27017
 MONGO_USERNAME = ''
 MONGO_PASSWORD = ''
-MONGO_DBNAME = 'gomez'
+MONGO_DBNAME = 'notifications'
 
 # also, correctly set the API entry point
 # SERVER_NAME = 'localhost'
@@ -30,48 +30,70 @@ ITEM_METHODS = ['GET', 'PATCH', 'DELETE']
 CACHE_CONTROL = 'max-age=20'
 CACHE_EXPIRES = 20
 
-QUERY_WHERE = 'query'
+# QUERY_WHERE = 'query'
 
-daily = {
+units = ['ATG', 'ATC Mobile', 'Dealer Site', 'ATC', 'RealDeal', 'KBB', 'Tradein', 'vAuto', 'Fastlane', 'ATC SYC', 'VinSolution', 'HomeNet', 'ATX', 'CRM']
+
+incident = {
     # if 'item_title' is not provided Eve will just strip the final
     # 's' from resource name, and use it as the item_title.
-    # 'item_title': 'daily_score',
+    # 'item_title': 'incident',
 
+    'schema': {
+        'title': {
+            'type': 'string',
+            'minlength': 1,
+            'maxlength': 128,
+            'required': True,
+        },
+        'status': {
+            'type': 'string',
+            'allowed': ['red', 'yellow', 'green'],
+            'required': True,
+        },
+        'unit': {
+            'type': 'string',
+            'allowed': units,
+            'required': True,
+        },
+        'description': {
+            'type': 'string',
+            'minlength': 1,
+            'maxlength': 512,
+            'required': True,
+        },
+        'created_by': {
+            'type': 'string',
+            'maxlength': 32,
+        },
+    }
+}
+
+update = {
     # We choose to override global cache-control directives for this resource.
     'cache_control': 'max-age=10,must-revalidate',
     'cache_expires': 10,
 
-    'additional_lookup': {
-        'url': 'regex("[\w]+")',
-        'field': 'unit'
-    },
-
     'schema': {
-        'page': {
+        'created_by': {
             'type': 'string',
+            'maxlength': 32,
+        },
+        'description': {
+            'type': 'string',
+        },
+        'incident': {
+            'type': 'objectid',
             'required': True,
-        },
-        'unit': {
-            'type': 'string',
-        },
-        'count': {
-            'type': 'integer',
-        },
-        'availability': {
-            'type': 'integer',
-        },
-        'unit': {
-            'type': 'string',
-            'required': True,
-        },
-        'page_id': {
-            'type': 'integer',
-        },
-        'date': {
-            'type': 'datetime',
-        },
-        'performance': {
-            'type': 'float',
+            # referential integrity constraint: value must exist in the
+            # 'incidents' collection. Since we aren't declaring a 'field' key,
+            # will default to `incidents._id` (or, more precisely, to whatever
+            # ID_FIELD value is).
+            'data_relation': {
+                'resource': 'incidents',
+                # make the owner embeddable with ?embedded={"incident":1}
+                'embeddable': True
+            },
         },
     }
 }
@@ -79,5 +101,6 @@ daily = {
 # The DOMAIN dict explains which resources will be available and how they will
 # be accessible to the API consumer.
 DOMAIN = {
-    'daily': daily,
+    'incidents': incident,
+    'updates': update,
 }

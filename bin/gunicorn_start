@@ -1,0 +1,22 @@
+#!/bin/bash
+
+NAME='EVE-APP'
+BASEDIR=/Users/bcivey/devel/flaskcards/
+VENVDIR=$BASEDIR/
+SOCKFILE=$BASEDIR/sock
+APPDIR=$BASEDIR/cards/eve-app
+USER=www
+GROUP=www
+NUM_WORKERS=2
+
+
+source $VENVDIR/bin/activate
+
+export PYTHONPATH=$APPDIR:$PYTHONPATH
+
+# Create the run directory if it doesn't exist
+RUNDIR=$(dirname $SOCKFILE)
+test -d $RUNDIR || mkdir -p $RUNDIR
+
+# Start your unicorn
+exec gunicorn -w $NUM_WORKERS run:app -b 0.0.0.0:5000 --name $NAME --bind=unix:$SOCKFILE

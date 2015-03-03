@@ -4,14 +4,13 @@
     eve-app settings
 """
 
-import os
 
 # Use the MongoHQ sandbox as our backend.
-MONGO_HOST = 'ds031721.mongolab.com'
-MONGO_PORT = 31721
-MONGO_USERNAME = 'score_dbuser'
-MONGO_PASSWORD = '3003SummitBlvd'
-MONGO_DBNAME = 'scorecard'
+MONGO_HOST = 'localhost'
+MONGO_PORT = 27017
+MONGO_USERNAME = ''
+MONGO_PASSWORD = ''
+MONGO_DBNAME = 'gomez'
 
 # also, correctly set the API entry point
 # SERVER_NAME = 'localhost'
@@ -30,6 +29,8 @@ ITEM_METHODS = ['GET', 'PATCH', 'DELETE']
 # API. We can always override these global settings later.
 CACHE_CONTROL = 'max-age=20'
 CACHE_EXPIRES = 20
+
+QUERY_WHERE = 'query'
 
 daily = {
     # if 'item_title' is not provided Eve will just strip the final

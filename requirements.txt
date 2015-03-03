@@ -1,2 +1,2 @@
-Eve==0.4
+Eve
 celery

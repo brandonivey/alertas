@@ -61,7 +61,7 @@ def pip(reqs_path):
 
 
 @task
-def upload(**kwargs):
+def deploy(**kwargs):
     if 'm' in kwargs:
         message = kwargs['m']
         local("svn ci -m '%s'" % message)

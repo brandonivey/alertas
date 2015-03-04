@@ -1,10 +1,11 @@
 #!/bin/bash
 
-NAME='EVE-APP'
-BASEDIR=/Users/bcivey/devel/flaskcards/
-VENVDIR=$BASEDIR/
-SOCKFILE=$BASEDIR/sock
-APPDIR=$BASEDIR/cards/eve-app
+NAME='ALERTS'
+
+APPDIR=${PWD}
+BASEDIR=$(dirname "$APPDIR")
+VENVDIR=$BASEDIR
+SOCKFILE=$BASEDIR/run/sock
 USER=www
 GROUP=www
 NUM_WORKERS=2

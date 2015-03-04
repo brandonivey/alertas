@@ -30,12 +30,10 @@ ITEM_METHODS = ['GET', 'PATCH', 'DELETE']
 CACHE_CONTROL = 'max-age=20'
 CACHE_EXPIRES = 20
 
-# QUERY_WHERE = 'query'
-
 units = ['ATG', 'ATC Mobile', 'Dealer Site', 'ATC', 'RealDeal', 'KBB', 'Tradein', 'vAuto', 'Fastlane', 'ATC SYC', 'VinSolution', 'HomeNet', 'ATX', 'CRM']
 
 incident = {
-    # if 'item_title' is not provided Eve will just strip the final
+    # if 'item_title' is not provided API will just strip the final
     # 's' from resource name, and use it as the item_title.
     # 'item_title': 'incident',
 
@@ -44,7 +42,6 @@ incident = {
             'type': 'string',
             'minlength': 1,
             'maxlength': 128,
-            'required': True,
         },
         'status': {
             'type': 'string',
@@ -60,7 +57,6 @@ incident = {
             'type': 'string',
             'minlength': 1,
             'maxlength': 512,
-            'required': True,
         },
         'created_by': {
             'type': 'string',
@@ -81,6 +77,9 @@ update = {
         },
         'description': {
             'type': 'string',
+            'minlength': 1,
+            'maxlength': 512,
+            'required': True,
         },
         'incident': {
             'type': 'objectid',

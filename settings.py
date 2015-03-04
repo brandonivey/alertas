@@ -53,7 +53,7 @@ incident = {
             'allowed': units,
             'required': True,
         },
-        'description': {
+        'summary': {
             'type': 'string',
             'minlength': 1,
             'maxlength': 512,

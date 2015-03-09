@@ -2,10 +2,10 @@
 
 NAME='ALERTS'
 
-BASEDIR=/data/notifications
-APPDIR=$BASEDIR/alertas
+APPDIR=${PWD}
+BASEDIR=$(dirname "$APPDIR")
 VENVDIR=$BASEDIR
-PIDFILE=$BASEDIR/run/alertas.pid
+PIDFILE=$BASEDIR/run/alertas.pidz:x
 USER=www
 GROUP=www
 NUM_WORKERS=2

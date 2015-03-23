@@ -30,6 +30,10 @@ ITEM_METHODS = ['GET', 'PATCH', 'DELETE']
 CACHE_CONTROL = 'max-age=20'
 CACHE_EXPIRES = 20
 
+X_DOMAINS = '*'
+X_HEADERS = ['Authorization','If-Match','Access-Control-Expose-Headers','Content-Type','Pragma','Cache-Control']
+X_EXPOSE_HEADERS = ['Origin', 'X-Requested-With', 'Content-Type', 'Accept']
+
 units = ['ATG', 'ATC Mobile', 'Dealer Site', 'ATC', 'RealDeal', 'KBB', 'Tradein', 'vAuto', 'Fastlane', 'ATC SYC', 'VinSolution', 'HomeNet', 'ATX', 'CRM']
 
 incident = {

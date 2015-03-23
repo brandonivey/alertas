@@ -61,13 +61,17 @@ def pip(reqs_path):
 
 
 @task
+def restart_service():
+    sudo("super restart notifications")
+
+
+@task
 def deploy(**kwargs):
     if 'm' in kwargs:
         message = kwargs['m']
         local("svn ci -m '%s'" % message)
     else:
         local("echo 'WARNING: running deploy without SVN commit.\n##########'")
-
 
     # make sure the directory is there!
     if not exists(env.temp_path):
@@ -87,6 +91,7 @@ def deploy(**kwargs):
     sudo("cp -r %s/* %s" % (env.temp_path, env.proj_path))
     # install python requirements
     pip("%s/requirements.txt" % env.proj_path)
+    restart_service()
 
 
 @task
